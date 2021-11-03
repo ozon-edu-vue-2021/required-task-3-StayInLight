@@ -36,7 +36,11 @@
         </div>
       </div>
       <div v-else class="profile">
+        <div v-if="!person" class="profile__empty">Место пустое</div>
+        <PersonCard v-else :person="person" />
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
