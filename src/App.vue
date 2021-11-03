@@ -1,10 +1,17 @@
 <template>
-    <div id="app">
-        <div class="office">
-            <Map />
-            <SideMenu />
-        </div>
+  <div id="app">
+    <div class="office">
+      <Map
+        @update:person="updatePerson"
+        @update:isUserOpenned="updateIsUserOpenned"
+      />
+      <SideMenu
+        :isUserOpenned="isUserOpenned"
+        :person="person"
+        @update:isUserOpenned="updateIsUserOpenned"
+      />
     </div>
+  </div>
 </template>
 
 <script>
@@ -16,6 +23,20 @@ export default {
   components: {
     Map,
     SideMenu,
+  },
+  data() {
+    return {
+      isUserOpenned: false,
+      person: null,
+    };
+  },
+  methods: {
+    updatePerson(newPerson) {
+      this.person = newPerson;
+    },
+    updateIsUserOpenned(flag) {
+      this.isUserOpenned = flag;
+    },
   },
 };
 </script>
