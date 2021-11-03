@@ -47,38 +47,61 @@
 import LegendItem from "./SideMenu/LegendItem.vue";
 import PersonCard from "./SideMenu/PersonCard.vue";
 import legend from "@/assets/data/legend.json";
+import draggable from "vuedraggable";
+import { Doughnut } from "vue-chartjs";
 
 export default {
-    props: {
-        isUserOpenned: {
-            type: Boolean,
-            default: false,
-        },
-        person: {
-            type: Object,
-            default: null,
-        },
+  props: {
+    isUserOpenned: {
+      type: Boolean,
+      default: false,
     },
-    components: {
-        LegendItem,
-        PersonCard,
+    person: {
+      type: Object,
+      default: null,
     },
-    data() {
-        return {
-            legend: [],
-        };
+  },
+  components: {
+    LegendItem,
+    PersonCard,
+    draggable,
+    Doughnut,
+  },
+  data() {
+    return {
+      legend: [],
+    };
+  },
+  created() {
+    this.loadLegend();
+  },
+  mounted() {
+    this.makeChart();
+  },
+  methods: {
+    loadLegend() {
+      this.legend = legend;
     },
-    created() {
-        this.loadLegend();
+    closeProfile() {
+      this.$emit("update:isUserOpenned", false);
     },
-    methods: {
-        loadLegend() {
-            this.legend = legend;
-        },
-        closeProfile() {
-            this.$emit("update:isUserOpenned", false);
-        },
+    makeChart() {
+      const chartData = {
+        labels: this.legend.map(({ text }) => text),
+        datasets: [
+          {
+            label: "Легенда",
+            backgroundColor: this.legend.map(({ color }) => color),
+            data: this.legend.map(({ counter }) => counter),
+          },
+        ],
+      };
+
+      const options = { legend: { display: false } };
+
+      this.$refs.chart.renderChart(chartData, options);
     },
+  },
 };
 </script>
 
